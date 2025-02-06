@@ -1,3 +1,6 @@
+import javax.swing.*;
+import java.awt.*;
+
 /**
  * A class written to support the TicTacToe Game.
  *
@@ -16,6 +19,11 @@ public class Square {
     private int row;
     private int col;
     private boolean isWinningSquare;
+    private TicTacToeViewer game;
+    private int gameWidth;
+    private int gameHeight;
+    private Image xImage;
+    private Image oImage;
 
     /**
      * Constructor to initialize one Square of the
@@ -23,9 +31,14 @@ public class Square {
      * @param row the row the square is in
      * @param col the column the square is in
      */
-    public Square(int row, int col) {
+    public Square(int row, int col, TicTacToeViewer game) {
+        this.game = game;
+        this.gameWidth = game.getWidth();
+        this.gameHeight= game.getHeight();
         this.row = row;
         this.col = col;
+        xImage = new ImageIcon("Resources/X.png").getImage();
+        oImage = new ImageIcon("Resources/O.png").getImage();
 
         this.marker = TicTacToe.BLANK;
         this.isWinningSquare = false;
@@ -58,4 +71,38 @@ public class Square {
     public String toString() {
         return this.marker;
     }
+
+    public void draw(Graphics g) {
+        String winner = game.t.getWinner();
+        if(!winner.equals(""))
+        {
+            if(this.marker.equals("X"))
+            {
+                g.setColor(Color.GREEN);
+                g.fillRect(game.SQUARE_LENGTH * (col + 1), game.SQUARE_LENGTH * (row + 1), game.SQUARE_LENGTH, game.SQUARE_LENGTH);
+            }
+            else if(this.marker.equals("O"))
+            {
+                g.setColor(Color.RED);
+                g.fillRect(game.SQUARE_LENGTH * (col + 1), game.SQUARE_LENGTH * (row + 1), game.SQUARE_LENGTH, game.SQUARE_LENGTH);
+            }
+        }
+
+
+
+        g.setColor(Color.BLACK);
+        g.drawRect(game.SQUARE_LENGTH * (col + 1), game.SQUARE_LENGTH * (row + 1), game.SQUARE_LENGTH, game.SQUARE_LENGTH);
+        if(this.marker.equals("X")) {
+            g.setColor(Color.BLACK);
+            g.drawImage(xImage, (col+1)*100 + 10, (row+1)*100 + 10, 80, 80, game);
+
+        }
+        else if(this.marker.equals("O"))
+        {
+            g.setColor(Color.BLACK);
+            g.drawImage(oImage, (col+1)*100 + 10, (row+1)*100+ 10, 80, 80, game);
+        }
+
+    }
 }
+

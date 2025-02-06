@@ -10,6 +10,8 @@
  * @version: Jan 2023
  */
 
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
 import java.util.Scanner;
 
 public class TicTacToe
@@ -32,6 +34,8 @@ public class TicTacToe
     private int winIndex;       // Provides the index of the row/col of the win
     private int turn;
 
+    private TicTacToeViewer window;
+    private Square[] squares;
     private Square[][] board;
     private boolean isGameOver;
 
@@ -42,20 +46,22 @@ public class TicTacToe
      * The view is initialized with this TicTacToe object
      */
     public TicTacToe() {
+        window = new TicTacToeViewer(this);
         // Initialize Squares in the board
         this.board = new Square[3][3];
         for(int row = 0; row < this.board.length; row++) {
             for(int col = 0; col< this.board[row].length; col++) {
-                this.board[row][col] = new Square(row, col);
+                this.board[row][col] = new Square(row, col, window);
             }
         }
-
+        window.repaint();
         // Initialize winning stats variables
         this.isGameOver = false;
         this.turn = 0;
-        this.winner = BLANK;
+        this.winner = "";
         this.winIndex = -1;
         this.winDirection = -1;
+        window.repaint();
     }
 
     /******************** Methods You May Find Helpful ********************/
@@ -64,7 +70,11 @@ public class TicTacToe
     }
 
     public String getWinner() {
-        return this.winner;
+        if(checkWin())
+        {
+            return this.winner;
+        }
+        return "";
     }
 
     public boolean getGameOver() {
@@ -73,6 +83,14 @@ public class TicTacToe
 
     public boolean checkTie() {
         return this.isGameOver && this.winner.equals(BLANK);
+    }
+
+    public int getTurn()
+    {
+        return this.turn;
+    }
+    public Square[] getSquares() {
+        return squares;
     }
 
     /**
@@ -110,6 +128,7 @@ public class TicTacToe
         // Loop until there is a winner or no more turns
         while(!this.checkWin() && this.checkTurn()) {
             this.printBoard();
+            window.repaint();
             System.out.println("Enter your Row Pick:" );
             int row = input.nextInt();
             System.out.println("Enter your Col Pick:" );
@@ -137,6 +156,7 @@ public class TicTacToe
                 System.out.println("X Wins!");
             }
         }
+        window.repaint();
     }
 
 
@@ -286,4 +306,5 @@ public class TicTacToe
         TicTacToe game = new TicTacToe();
         game.run();
     }
+
 }
