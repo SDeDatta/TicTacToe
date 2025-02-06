@@ -44,12 +44,19 @@ public class TicTacToeViewer extends JFrame {
             }
         }
 
-        String winner = t.getWinner();
-        if(!winner.equals(""))
+        if(t.getGameOver())
         {
+            String winner = t.getWinner();
             g.setColor(Color.BLACK);
             g.setFont(new Font("Arial", Font.BOLD,30));
-            g.drawString(winner + " Wins", 180, 450);
+            if(!winner.equals(""))
+            {
+                g.drawString(winner + " Wins", 180, 450);
+            }
+            else
+            {
+                g.drawString("It's a Tie!", 180,450);
+            }
         }
     }
 }
